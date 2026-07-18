@@ -1,6 +1,5 @@
 extends Node
 
-# Señales globales
 signal lives_changed(new_lives: int)
 signal vinculo_changed(new_vinculo: int)
 signal evidence_added(item: Dictionary)
@@ -8,7 +7,6 @@ signal testimonio_added(dialogue_id: String)
 signal allies_changed(new_allies: int)
 signal seeds_changed(new_seeds: int)
 
-# Variables de estado global
 var hero_name: String = "Viajero"
 var hero_gender: String = "male"
 
@@ -21,7 +19,6 @@ var evidence: Array = []
 var testimonies: Array = []
 var selected_zone: String = "puerto_maldonado"
 
-# Setters con emisión de señales
 func set_lives(val: int) -> void:
 	lives = clamp(val, 0, 3)
 	lives_changed.emit(lives)
@@ -38,7 +35,6 @@ func set_allies(val: int) -> void:
 	allies = max(0, val)
 	allies_changed.emit(allies)
 
-# Inicializar nueva partida
 func new_game(name_input: String, gender_input: String) -> void:
 	hero_name = name_input.strip_edges()
 	if hero_name.is_empty():
@@ -53,7 +49,6 @@ func new_game(name_input: String, gender_input: String) -> void:
 	testimonies.clear()
 	selected_zone = "puerto_maldonado"
 
-# Registrar evidencia (fotos de la cámara)
 func add_evidence(item_name: String, zone: String) -> void:
 	var item = {
 		"id": Time.get_unix_time_from_system(),
@@ -63,7 +58,6 @@ func add_evidence(item_name: String, zone: String) -> void:
 	evidence.append(item)
 	evidence_added.emit(item)
 
-# Registrar testimonio escuchado
 func add_testimonio(dialogue_id: String) -> void:
 	if not testimonies.has(dialogue_id):
 		testimonies.append(dialogue_id)
