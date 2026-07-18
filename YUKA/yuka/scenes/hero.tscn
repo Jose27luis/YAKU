@@ -18,7 +18,7 @@ shape = SubResource("RectangleShape2D_col")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -30)
-zoom = Vector2(2.0, 2.0)
+zoom = Vector2(1.0, 1.0)
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 drag_horizontal_enabled = true
