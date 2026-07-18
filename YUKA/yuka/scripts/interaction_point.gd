@@ -1,7 +1,6 @@
 extends Area2D
 
-# Propiedades configurables desde el Inspector de Godot
-@export var point_name: String = "Punto de interés"
+@export var point_name: String = "Punto de interes"
 @export var evidence_name: String = "Evidencia documentada"
 @export var evidence_zone: String = "La Frontera"
 
@@ -44,25 +43,20 @@ func _on_interact() -> void:
 	is_collected = true
 	interact_label.visible = false
 	
-	# Registrar evidencia en el GameManager
 	GameManager.add_evidence(evidence_name, evidence_zone)
 	
-	# Efecto visual: flash blanco + cambiar opacidad del sprite
 	var flash = ColorRect.new()
 	flash.color = Color(1, 1, 1, 0.6)
 	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
 	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
-	# Añadir flash al viewport global para simular foto de cámara
 	get_tree().root.add_child(flash)
 	
 	var tween = create_tween()
 	tween.tween_property(flash, "color:a", 0.0, 0.4)
 	tween.tween_callback(flash.queue_free)
 	
-	# Atenuar el sprite del punto de interés para indicar recolección
 	sprite.modulate.a = 0.3
 	
-	# Desconectar al héroe
 	if hero_ref:
 		hero_ref.set_interactable(self, false)
