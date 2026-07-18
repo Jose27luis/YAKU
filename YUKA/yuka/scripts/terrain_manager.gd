@@ -21,6 +21,7 @@ var safe_points = [
 ]
 
 func _ready() -> void:
+	texture_filter = TEXTURE_FILTER_NEAREST
 	_init_tileset()
 	
 	noise = FastNoiseLite.new()
