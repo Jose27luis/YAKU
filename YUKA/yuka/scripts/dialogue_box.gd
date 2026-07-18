@@ -14,7 +14,6 @@ var is_active: bool = false
 signal dialogue_finished(dialogue_id: String)
 
 func _ready() -> void:
-	# Añadir al grupo para que los NPCs puedan encontrarlo
 	add_to_group("dialogue_box")
 	panel.visible = false
 
@@ -37,7 +36,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_active:
 		return
 	
-	# Avanzar con E, Enter o Espacio
 	if event.is_action_pressed("ui_accept") or (event is InputEventKey and event.pressed and event.keycode == KEY_E):
 		_advance()
 		get_viewport().set_input_as_handled()
@@ -46,7 +44,6 @@ func _advance() -> void:
 	current_step += 1
 	
 	if current_step >= current_lines.size():
-		# Diálogo terminado
 		_end_dialogue()
 	else:
 		text_label.text = current_lines[current_step]
@@ -55,7 +52,6 @@ func _end_dialogue() -> void:
 	is_active = false
 	panel.visible = false
 	
-	# Registrar testimonio si tiene un ID
 	if not current_dialogue_id.is_empty():
 		GameManager.add_testimonio(current_dialogue_id)
 	
