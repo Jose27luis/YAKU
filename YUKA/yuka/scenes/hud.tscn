@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxName" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer/VBoxName"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 0.647059, 0.129412, 1)
+text = "RAÍZ"
+
+[node name="RoleLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer/VBoxName"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.603922, 0.560784, 0.478431, 1)
+text = "CRONISTA"
+
+[node name="Spacer" type="Control" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxStats" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="LivesLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer/VBoxStats"]
+layout_mode = 2
+text = "SALUD: 🍁🍁🍁"
+
+[node name="VinculoLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer/VBoxStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.188235, 0.686275, 0.686275, 1)
+text = "VÍNCULO: [■■■■□]"
+
+[node name="EvidenceLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer/VBoxStats"]
+layout_mode = 2
+text = "EVIDENCIAS: 0/5"
