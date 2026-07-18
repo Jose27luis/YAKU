@@ -1,0 +1,312 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/la_frontera.gd" id="1_frontera"]
+[ext_resource type="PackedScene" path="res://scenes/hero.tscn" id="2_hero"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/dialogue_box.tscn" id="4_dlg"]
+[ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="5_npc"]
+[ext_resource type="PackedScene" path="res://scenes/interaction_point.tscn" id="6_ip"]
+
+[sub_resource type="RectangleShape2D" id="wall_h"]
+size = Vector2(1920, 20)
+
+[sub_resource type="RectangleShape2D" id="wall_v"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="obstacle_tree1"]
+size = Vector2(24, 24)
+
+[sub_resource type="RectangleShape2D" id="obstacle_tree2"]
+size = Vector2(30, 28)
+
+[sub_resource type="RectangleShape2D" id="barrier_shape"]
+size = Vector2(20, 200)
+
+[node name="LaFrontera" type="Node2D"]
+script = ExtResource("1_frontera")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.14, 0.18, 0.1, 1)
+
+[node name="GroundPatches" type="Node2D" parent="."]
+
+[node name="Path1" type="ColorRect" parent="GroundPatches"]
+offset_left = 80.0
+offset_top = 400.0
+offset_right = 1840.0
+offset_bottom = 500.0
+color = Color(0.28, 0.22, 0.14, 1)
+
+[node name="Path2" type="ColorRect" parent="GroundPatches"]
+offset_left = 400.0
+offset_top = 200.0
+offset_right = 500.0
+offset_bottom = 800.0
+color = Color(0.28, 0.22, 0.14, 1)
+
+[node name="Path3" type="ColorRect" parent="GroundPatches"]
+offset_left = 900.0
+offset_top = 300.0
+offset_right = 1000.0
+offset_bottom = 900.0
+color = Color(0.25, 0.2, 0.12, 1)
+
+[node name="Clearing1" type="ColorRect" parent="GroundPatches"]
+offset_left = 300.0
+offset_top = 350.0
+offset_right = 550.0
+offset_bottom = 550.0
+color = Color(0.22, 0.19, 0.12, 1)
+
+[node name="Clearing2" type="ColorRect" parent="GroundPatches"]
+offset_left = 1200.0
+offset_top = 350.0
+offset_right = 1500.0
+offset_bottom = 600.0
+color = Color(0.2, 0.17, 0.1, 1)
+
+[node name="ToxicPuddle1" type="ColorRect" parent="GroundPatches"]
+offset_left = 1300.0
+offset_top = 700.0
+offset_right = 1420.0
+offset_bottom = 780.0
+color = Color(0.24, 0.34, 0.18, 0.7)
+
+[node name="ToxicPuddle2" type="ColorRect" parent="GroundPatches"]
+offset_left = 700.0
+offset_top = 750.0
+offset_right = 800.0
+offset_bottom = 830.0
+color = Color(0.2, 0.3, 0.14, 0.6)
+
+[node name="RiverStrip" type="ColorRect" parent="GroundPatches"]
+offset_left = 0.0
+offset_top = 900.0
+offset_right = 1920.0
+offset_bottom = 1000.0
+color = Color(0.18, 0.28, 0.2, 0.8)
+
+[node name="Obstacles" type="Node2D" parent="."]
+
+[node name="Tree1" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(200, 250)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree1"]
+shape = SubResource("obstacle_tree1")
+[node name="Vis" type="ColorRect" parent="Obstacles/Tree1"]
+offset_left = -12.0
+offset_top = -30.0
+offset_right = 12.0
+offset_bottom = 0.0
+color = Color(0.12, 0.28, 0.08, 1)
+
+[node name="Tree2" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(600, 180)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree2"]
+shape = SubResource("obstacle_tree1")
+[node name="Vis" type="ColorRect" parent="Obstacles/Tree2"]
+offset_left = -12.0
+offset_top = -30.0
+offset_right = 12.0
+offset_bottom = 0.0
+color = Color(0.1, 0.25, 0.06, 1)
+
+[node name="Tree3" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(150, 600)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree3"]
+shape = SubResource("obstacle_tree2")
+[node name="Vis" type="ColorRect" parent="Obstacles/Tree3"]
+offset_left = -15.0
+offset_top = -35.0
+offset_right = 15.0
+offset_bottom = 0.0
+color = Color(0.13, 0.3, 0.09, 1)
+
+[node name="Tree4" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(800, 280)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree4"]
+shape = SubResource("obstacle_tree2")
+[node name="Vis" type="ColorRect" parent="Obstacles/Tree4"]
+offset_left = -15.0
+offset_top = -35.0
+offset_right = 15.0
+offset_bottom = 0.0
+color = Color(0.15, 0.26, 0.1, 1)
+
+[node name="Tree5" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(1100, 200)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree5"]
+shape = SubResource("obstacle_tree1")
+[node name="Vis" type="ColorRect" parent="Obstacles/Tree5"]
+offset_left = -12.0
+offset_top = -30.0
+offset_right = 12.0
+offset_bottom = 0.0
+color = Color(0.08, 0.22, 0.06, 1)
+
+[node name="Tree6" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(1500, 250)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree6"]
+shape = SubResource("obstacle_tree1")
+[node name="Vis" type="ColorRect" parent="Obstacles/Tree6"]
+offset_left = -12.0
+offset_top = -30.0
+offset_right = 12.0
+offset_bottom = 0.0
+color = Color(0.1, 0.2, 0.07, 1)
+
+[node name="Stump1" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(650, 500)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Stump1"]
+shape = SubResource("obstacle_tree1")
+[node name="Vis" type="ColorRect" parent="Obstacles/Stump1"]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+color = Color(0.3, 0.2, 0.1, 1)
+
+[node name="Stump2" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(1050, 550)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Stump2"]
+shape = SubResource("obstacle_tree1")
+[node name="Vis" type="ColorRect" parent="Obstacles/Stump2"]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(0.28, 0.18, 0.08, 1)
+
+[node name="Choza1" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(360, 320)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Choza1"]
+shape = SubResource("obstacle_tree2")
+[node name="Vis" type="ColorRect" parent="Obstacles/Choza1"]
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = 5.0
+color = Color(0.22, 0.35, 0.55, 0.8)
+
+[node name="Choza2" type="StaticBody2D" parent="Obstacles"]
+position = Vector2(1350, 450)
+[node name="Col" type="CollisionShape2D" parent="Obstacles/Choza2"]
+shape = SubResource("obstacle_tree2")
+[node name="Vis" type="ColorRect" parent="Obstacles/Choza2"]
+offset_left = -22.0
+offset_top = -28.0
+offset_right = 22.0
+offset_bottom = 5.0
+color = Color(0.2, 0.32, 0.5, 0.7)
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="TopWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(960, 10)
+[node name="Col" type="CollisionShape2D" parent="Walls/TopWall"]
+shape = SubResource("wall_h")
+
+[node name="BottomWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(960, 1070)
+[node name="Col" type="CollisionShape2D" parent="Walls/BottomWall"]
+shape = SubResource("wall_h")
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(10, 540)
+[node name="Col" type="CollisionShape2D" parent="Walls/LeftWall"]
+shape = SubResource("wall_v")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(1910, 540)
+[node name="Col" type="CollisionShape2D" parent="Walls/RightWall"]
+shape = SubResource("wall_v")
+
+[node name="Barrier" type="StaticBody2D" parent="."]
+position = Vector2(1860, 450)
+[node name="Col" type="CollisionShape2D" parent="Barrier"]
+shape = SubResource("barrier_shape")
+[node name="Sign" type="Label" parent="Barrier"]
+offset_left = -60.0
+offset_top = -110.0
+offset_right = 60.0
+offset_bottom = -90.0
+theme_override_colors/font_color = Color(0.77, 0.21, 0.27, 1)
+theme_override_font_sizes/font_size = 8
+text = "⛔ ZONA RESTRINGIDA"
+horizontal_alignment = 1
+[node name="Post" type="ColorRect" parent="Barrier"]
+offset_left = -3.0
+offset_top = -100.0
+offset_right = 3.0
+offset_bottom = 100.0
+color = Color(0.5, 0.3, 0.15, 1)
+
+[node name="Hero" parent="." instance=ExtResource("2_hero")]
+position = Vector2(120, 450)
+
+[node name="DonCarmelo" parent="." instance=ExtResource("5_npc")]
+position = Vector2(440, 420)
+npc_name = "Don Carmelo"
+npc_role = "Agricultor desplazado"
+dialogue_lines = Array[String](["Antes esta tierra daba yuca, plátano, cacao... todo lo que necesitábamos.", "Pero el agua del riego viene del río. Y el río ya no es el mismo.", "El mercurio de las dragas lo envenenó todo. Mis cultivos se pudrieron de raíz.", "Fui al REINFO a denunciar. Me dijeron que los mineros tienen permiso.", "¿Permiso para matarnos de hambre? Eso no es un permiso, es una sentencia.", "Si puedes, documenta esto. Que alguien vea lo que nos quitaron."])
+dialogue_id = "don_carmelo_testimonio"
+npc_color = Color(0.55, 0.38, 0.2, 1)
+
+[node name="SraLucia" parent="." instance=ExtResource("5_npc")]
+position = Vector2(1350, 500)
+npc_name = "Señora Lucía"
+npc_role = "Madre de familia"
+dialogue_lines = Array[String](["Mis hijos se bañaban en el río todos los días. Era cristalino.", "Ahora tienen ronchas en la piel. El doctor dice que es el mercurio.", "No tenemos plata para ir a Puerto Maldonado. Aquí no hay hospital.", "Los mineros pasan con sus camiones llenos de arena. No nos miran.", "¿De qué sirve el oro si nos está matando?"])
+dialogue_id = "sra_lucia_testimonio"
+npc_color = Color(0.6, 0.42, 0.28, 1)
+
+[node name="CultivoContaminado" parent="." instance=ExtResource("6_ip")]
+position = Vector2(500, 550)
+point_name = "Cultivo contaminado"
+evidence_name = "Cultivo destruido por mercurio"
+evidence_zone = "La Frontera"
+
+[node name="AguaToxica" parent="." instance=ExtResource("6_ip")]
+position = Vector2(750, 950)
+point_name = "Río contaminado"
+evidence_name = "Agua contaminada del río"
+evidence_zone = "La Frontera"
+
+[node name="CartelREINFO" parent="." instance=ExtResource("6_ip")]
+position = Vector2(1600, 350)
+point_name = "Cartel REINFO adulterado"
+evidence_name = "Permiso REINFO adulterado"
+evidence_zone = "La Frontera"
+
+[node name="HUD" parent="." instance=ExtResource("3_hud")]
+[node name="DialogueBox" parent="." instance=ExtResource("4_dlg")]
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="ZoneLabel" type="Label" parent="UILayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 40.0
+offset_right = 200.0
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.85098, 0.647059, 0.129412, 1)
+theme_override_font_sizes/font_size = 14
+text = "LA FRONTERA — El Bosque Herido"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="UILayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 35.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 9
+text = "Volver al Mapa"
