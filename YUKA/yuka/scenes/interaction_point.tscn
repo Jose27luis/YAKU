@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/interaction_point.gd" id="1_ip"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detect"]
+size = Vector2(40, 40)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ip"]
+size = Vector2(24, 24)
+
+[node name="InteractionPoint" type="Area2D"]
+collision_mask = 1
+script = ExtResource("1_ip")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.8, 0.73, 0.0, 1)
+texture = SubResource("PlaceholderTexture2D_ip")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_detect")
+
+[node name="InteractLabel" type="Label" parent="."]
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = -16.0
+theme_override_colors/font_color = Color(0.85098, 0.647059, 0.129412, 1)
+theme_override_font_sizes/font_size = 8
+text = "📷 Foto"
+horizontal_alignment = 1
