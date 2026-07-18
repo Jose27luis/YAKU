@@ -13,24 +13,21 @@ var style_selected: StyleBoxFlat
 var style_unselected: StyleBoxFlat
 
 func _ready() -> void:
-	# Definir estilos planos con bordes retro dorados de forma dinámica
 	style_selected = StyleBoxFlat.new()
-	style_selected.bg_color = Color(0.16, 0.14, 0.12, 0.5) # rgba(42,37,32,0.5)
-	style_selected.border_color = Color(0.85, 0.65, 0.13) # Oro #D9A521
+	style_selected.bg_color = Color(0.16, 0.14, 0.12, 0.5)
+	style_selected.border_color = Color(0.85, 0.65, 0.13)
 	style_selected.set_border_width_all(2)
 	
 	style_unselected = StyleBoxFlat.new()
 	style_unselected.bg_color = Color(0.16, 0.14, 0.12, 0.5)
-	style_unselected.border_color = Color(0.79, 0.64, 0.29, 0.2) # rgba(201,162,75,0.2)
+	style_unselected.border_color = Color(0.79, 0.64, 0.29, 0.2)
 	style_unselected.set_border_width_all(2)
 
-	# Conectar señales
 	male_button.pressed.connect(_on_male_selected)
 	female_button.pressed.connect(_on_female_selected)
 	start_button.pressed.connect(_on_start_pressed)
 	back_button.pressed.connect(_on_back_pressed)
 	
-	# También permitir clicks directos en los paneles de imágenes
 	male_panel.gui_input.connect(_on_male_panel_input)
 	female_panel.gui_input.connect(_on_female_panel_input)
 	
@@ -74,7 +71,6 @@ func _on_start_pressed() -> void:
 	GameManager.new_game(name_text, selected_gender)
 	print("Partida creada: ", GameManager.hero_name, " (", GameManager.hero_gender, ")")
 	
-	# Transicionar a la escena de selección del Mapa del Mundo
 	SceneManager.goto_scene("res://scenes/world_map.tscn")
 
 func _on_back_pressed() -> void:
