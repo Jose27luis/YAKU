@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <style>
+    body { margin:0; background:#040201; display:flex; align-items:center; justify-content:center; min-height:100vh; overflow:hidden; }
+    * { box-sizing:border-box; }
+    input { font-family:'Press Start 2P',monospace; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes fadeUp { from{transform:translateY(10px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes fadeUpStay { from{transform:translateY(10px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes introFade { from{opacity:0} to{opacity:1} }
+    @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(-8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+    @keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+    @keyframes guardMove { 0%,100%{transform:translateX(0)} 40%{transform:translateX(46px)} 60%{transform:translateX(46px)} }
+    @keyframes mercPulse { 0%,100%{opacity:.38} 50%{opacity:.74} }
+    @keyframes yakuGlow { 0%,100%{opacity:.14;transform:scale(1)} 50%{opacity:.26;transform:scale(1.07)} }
+    @keyframes arrowBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
+    @keyframes crtFlicker { 0% { opacity:0.992; } 50% { opacity:1; } 100% { opacity:0.988; } }
+
+    /* CRT Emulation */
+    .crt-screen {
+      position: relative;
+    }
+    .crt-screen::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04));
+      z-index: 999;
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+    .crt-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, transparent 65%, rgba(0,0,0,0.45) 100%);
+      z-index: 998;
+      pointer-events: none;
+    }
+    .crt-flicker {
+      animation: crtFlicker 0.2s infinite;
+    }
+
+    /* Menu Hover Micro-interactions */
+    .retro-menu-item {
+      display: flex;
+      gap: 10px;
+      padding: 9px 0;
+      cursor: pointer;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: #EDE6D6;
+      align-items: center;
+      transition: color 0.1s;
+    }
+    .retro-menu-item .menu-cursor {
+      visibility: hidden;
+      color: #D9A521;
+    }
+    .retro-menu-item:hover {
+      color: #D9A521 !important;
+    }
+    .retro-menu-item:hover .menu-cursor {
+      visibility: visible;
+      animation: blink 0.8s infinite;
+    }
+
+    /* Dialog Arrow Bounce */
+    .arrow-next {
+      animation: arrowBounce 0.8s infinite;
+      display: inline-block;
+    }
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:center;justify-content:center;width:100vw;height:100vh;background:radial-gradient(ellipse at 40% 60%,#1a0d06,#040201);">
+
+  <!-- Android landscape phone frame -->
+  <div style="position:relative;width:916px;height:506px;flex-shrink:0;">
+
+    <!-- Phone body -->
+    <div style="position:absolute;inset:0;background:linear-gradient(155deg,#1e1e1e 0%,#0f0f0f 50%,#191919 100%);border-radius:30px;box-shadow:0 0 0 1px #252525,0 2px 6px rgba(0,0,0,.6),0 20px 60px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.03);"></div>
+
+    <!-- Buttons top edge -->
+    <div style="position:absolute;top:-3px;left:218px;width:38px;height:3px;background:#1a1a1a;border-radius:2px 2px 0 0;"></div>
+    <div style="position:absolute;top:-3px;left:266px;width:38px;height:3px;background:#1a1a1a;border-radius:2px 2px 0 0;"></div>
+    <!-- Power bottom -->
+    <div style="position:absolute;bottom:-3px;left:308px;width:52px;height:3px;background:#1a1a1a;border-radius:0 0 2px 2px;"></div>
+
+    <!-- Speaker grills -->
+    <div style="position:absolute;left:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;">
+      <div style="width:3px;height:5px;background:#090909;border-radius:1px;"></div>
+      <div style="width:3px;height:5px;background:#090909;border-radius:1px;"></div>
+      <div style="width:3px;height:5px;background:#090909;border-radius:1px;"></div>
+    </div>
+    <div style="position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;">
+      <div style="width:3px;height:5px;background:#090909;border-radius:1px;"></div>
+      <div style="width:3px;height:5px;background:#090909;border-radius:1px;"></div>
+      <div style="width:3px;height:5px;background:#090909;border-radius:1px;"></div>
+    </div>
+
+    <!-- Camera -->
+    <div style="position:absolute;top:50%;left:9px;transform:translateY(-50%) translateY(-19px);width:7px;height:7px;background:#080808;border-radius:50%;box-shadow:0 0 0 1px #1a1a1a,inset 0 0 2px rgba(50,120,220,.2);"></div>
+    <!-- USB-C -->
+    <div style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:3px;height:10px;background:#0a0a0a;border-radius:1px;"></div>
+
+    <!-- ===== GAME SCREEN ===== -->
+    <div class="crt-screen crt-flicker" style="position:absolute;top:16px;left:28px;right:28px;bottom:16px;background:#14110E;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.7);">
+      <div class="crt-vignette"></div>
+
+      <!-- ========== SPLASH ========== -->
+      <sc-if value="{{ isSplash }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ onSplashTap }}" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#14110E;cursor:pointer;user-select:none;z-index:1;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.11) 1px,rgba(0,0,0,.11) 2px);pointer-events:none;z-index:2;"></div>
+          <div style="font-size:50px;line-height:1;margin-bottom:18px;animation:yakuGlow 4s ease-in-out infinite;filter:sepia(1) saturate(2.5) hue-rotate(15deg);">🐍</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:28px;color:#D9A521;text-shadow:4px 4px 0 #5A3200,8px 8px 0 rgba(0,0,0,.4);letter-spacing:3px;animation:fadeUp .7s ease;">DESIERTO</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:16px;color:#C9A24B;text-shadow:2px 2px 0 #5A3200;letter-spacing:9px;margin-top:3px;margin-bottom:30px;animation:fadeUp .7s .2s ease both;">DE ORO</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;text-align:center;line-height:2.6;margin-bottom:32px;padding:0 80px;animation:fadeUp .7s .5s ease both;">"Lo que el oro se llevó, tú puedes empezar a devolverlo.<br/>Pero nada vuelve igual."</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#EDE6D6;animation:blink 1.3s 1.4s infinite;">▸ TOCA PARA CONTINUAR</div>
+          <div style="position:absolute;bottom:13px;right:13px;font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;border:1px solid #3A3430;padding:3px 7px;">16+</div>
+          <div style="position:absolute;bottom:13px;left:13px;font-family:'Press Start 2P',monospace;font-size:5px;color:#3A3430;">v0.1 PROTOTIPO</div>
+        </div>
+      </sc-if>
+
+      <!-- ========== MAIN MENU ========== -->
+      <sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;display:flex;z-index:1;overflow:hidden;">
+          <!-- Left: forest -->
+          <div style="flex:1;background:#101a0f;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,#080e07,#101a0f 65%);"></div>
+            <svg style="position:absolute;bottom:0;left:0;" width="440" height="200" viewBox="0 0 440 200">
+              <rect x="0" y="162" width="440" height="38" fill="#080e07"/>
+              <rect x="8" y="84" width="20" height="116" fill="#070d06"/>
+              <polygon points="18,30 0,87 36,87" fill="#070d06"/>
+              <polygon points="18,10 3,54 33,54" fill="#0c1a0b"/>
+              <rect x="58" y="104" width="15" height="96" fill="#070d06"/>
+              <polygon points="65,58 46,106 84,106" fill="#070d06"/>
+              <rect x="102" y="80" width="23" height="120" fill="#080f07"/>
+              <polygon points="113,22 90,83 136,83" fill="#080f07"/>
+              <polygon points="113,4 93,50 133,50" fill="#0c1a0b"/>
+              <rect x="150" y="98" width="14" height="102" fill="#070d06"/>
+              <polygon points="157,54 140,100 174,100" fill="#070d06"/>
+              <rect x="188" y="86" width="24" height="114" fill="#080f07"/>
+              <polygon points="200,24 176,89 224,89" fill="#0c1a0b"/>
+            </svg>
+            <div style="position:absolute;top:14px;left:0;right:0;text-align:center;font-family:'Press Start 2P',monospace;font-size:6px;color:rgba(46,120,55,.4);">BOSQUE VIVO</div>
+            <div style="position:absolute;top:18px;left:38px;width:2px;height:2px;background:#EDE6D6;opacity:.55;"></div>
+            <div style="position:absolute;top:30px;left:108px;width:1px;height:1px;background:#EDE6D6;opacity:.4;"></div>
+            <div style="position:absolute;top:11px;left:176px;width:2px;height:2px;background:#EDE6D6;opacity:.5;"></div>
+          </div>
+          <!-- Right: desert -->
+          <div style="flex:1;background:#201a12;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,#161310,#201a12 55%,#2A2318);"></div>
+            <svg style="position:absolute;bottom:0;left:0;" width="440" height="200" viewBox="0 0 440 200">
+              <rect x="0" y="153" width="440" height="47" fill="#2A2318"/>
+              <ellipse cx="68" cy="156" rx="52" ry="10" fill="rgba(200,181,0,.36)"/>
+              <ellipse cx="248" cy="158" rx="38" ry="8" fill="rgba(200,181,0,.28)"/>
+              <ellipse cx="392" cy="156" rx="44" ry="9" fill="rgba(200,181,0,.31)"/>
+              <ellipse cx="130" cy="153" rx="46" ry="13" fill="#14110E" opacity=".8"/>
+              <ellipse cx="312" cy="154" rx="36" ry="11" fill="#14110E" opacity=".75"/>
+              <rect x="172" y="98" width="58" height="58" fill="#14110E"/>
+              <rect x="196" y="70" width="9" height="34" fill="#0f0d0a" transform="rotate(-10,200,87)"/>
+              <rect x="156" y="153" width="88" height="6" fill="#0f0d0a"/>
+              <text x="58" y="140" font-family="monospace" font-size="9" fill="#2FB6C4" filter="url(#glw)">CANTINA</text>
+              <text x="298" y="136" font-family="monospace" font-size="9" fill="#C4356B">ORO $$$</text>
+              <defs><filter id="glw"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            </svg>
+            <div style="position:absolute;top:14px;left:0;right:0;text-align:center;font-family:'Press Start 2P',monospace;font-size:6px;color:rgba(107,104,98,.4);">DESIERTO</div>
+          </div>
+          <!-- Center panel -->
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;">
+            <div style="background:rgba(20,17,14,.92);border:2px solid #C9A24B;padding:10px 30px;margin-bottom:18px;text-align:center;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:20px;color:#D9A521;text-shadow:3px 3px 0 #5A3200;letter-spacing:2px;">DESIERTO</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#C9A24B;letter-spacing:6px;margin-top:3px;">DE ORO</div>
+            </div>
+            <div style="background:rgba(42,37,32,.96);border:2px solid #C9A24B;box-shadow:inset 0 0 0 2px #2A2520, inset 0 0 0 3px #C9A24B, 5px 5px 0px rgba(0, 0, 0, 0.45);padding:10px 30px;min-width:236px;">
+              <div onClick="{{ onNewGame }}" class="retro-menu-item" style="border-bottom:1px solid rgba(201,162,75,.2);"><span class="menu-cursor">▸</span><span>Nueva partida</span></div>
+              <div onClick="{{ onContinue }}" class="retro-menu-item" style="border-bottom:1px solid rgba(201,162,75,.2);"><span class="menu-cursor">▸</span><span>Continuar</span></div>
+              <div class="retro-menu-item" style="border-bottom:1px solid rgba(201,162,75,.15);opacity:0.6;"><span class="menu-cursor">▸</span><span>Acerca del juego</span></div>
+              <div class="retro-menu-item" style="opacity:0.6;"><span class="menu-cursor">▸</span><span>Ajustes</span></div>
+            </div>
+          </div>
+          <div style="position:absolute;bottom:12px;right:12px;font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;border:1px solid #3A3430;padding:3px 7px;background:rgba(20,17,14,.8);z-index:10;">16+</div>
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.07) 1px,rgba(0,0,0,.07) 2px);pointer-events:none;z-index:20;"></div>
+        </div>
+      </sc-if>
+
+      <!-- ========== CREATE HERO ========== -->
+      <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:#14110E;display:flex;flex-direction:column;padding:16px 28px;z-index:1;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.09) 1px,rgba(0,0,0,.09) 2px);pointer-events:none;z-index:2;"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#EDE6D6;">CREA TU HÉROE</div>
+            <div onClick="{{ onBackMap }}" style="font-family:'Press Start 2P',monospace;font-size:9px;color:#9A8F7A;cursor:pointer;">☰</div>
+          </div>
+          <div style="height:2px;background:linear-gradient(to right,#C9A24B,rgba(201,162,75,.1));margin-bottom:20px;"></div>
+          <div style="display:flex;gap:32px;align-items:flex-start;flex:1;">
+            <!-- Gender -->
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;">GÉNERO</div>
+              <div style="display:flex;gap:18px;">
+                <div onClick="{{ onSelectMale }}" style="display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;">
+                  <div style="padding:8px;border:2px solid {{ maleBorder }};background:rgba(42,37,32,.5);">
+                    <svg width="42" height="58" viewBox="0 0 12 20" style="image-rendering:pixelated;display:block;">
+                      <rect x="2" y="0" width="8" height="7" fill="#B07D3A"/>
+                      <rect x="2" y="0" width="8" height="2" fill="#3A2010"/>
+                      <rect x="3" y="2" width="2" height="2" fill="#14110E"/>
+                      <rect x="7" y="2" width="2" height="2" fill="#14110E"/>
+                      <rect x="0" y="7" width="12" height="7" fill="#4A6080"/>
+                      <rect x="4" y="9" width="4" height="2" fill="#2A3040"/>
+                      <rect x="0" y="8" width="1" height="5" fill="#B07D3A"/>
+                      <rect x="11" y="8" width="1" height="5" fill="#B07D3A"/>
+                      <rect x="1" y="14" width="4" height="6" fill="#2A3A50"/>
+                      <rect x="7" y="14" width="4" height="6" fill="#2A3A50"/>
+                    </svg>
+                  </div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:{{ maleColor }};">♂ HÉROE</div>
+                </div>
+                <div onClick="{{ onSelectFemale }}" style="display:flex;flex-direction:column;align-items:center;gap:9px;cursor:pointer;">
+                  <div style="padding:8px;border:2px solid {{ femaleBorder }};background:rgba(42,37,32,.5);">
+                    <svg width="42" height="58" viewBox="0 0 12 20" style="image-rendering:pixelated;display:block;">
+                      <rect x="2" y="0" width="8" height="7" fill="#B8904A"/>
+                      <rect x="1" y="0" width="10" height="2" fill="#5A3010"/>
+                      <rect x="1" y="2" width="2" height="8" fill="#5A3010"/>
+                      <rect x="9" y="2" width="2" height="8" fill="#5A3010"/>
+                      <rect x="3" y="2" width="2" height="2" fill="#14110E"/>
+                      <rect x="7" y="2" width="2" height="2" fill="#14110E"/>
+                      <rect x="0" y="7" width="12" height="7" fill="#7A4A6A"/>
+                      <rect x="2" y="9" width="8" height="1" fill="rgba(255,255,255,.15)"/>
+                      <rect x="0" y="8" width="1" height="5" fill="#B8904A"/>
+                      <rect x="11" y="8" width="1" height="5" fill="#B8904A"/>
+                      <rect x="1" y="14" width="4" height="6" fill="#5A3A5A"/>
+                      <rect x="7" y="14" width="4" height="6" fill="#5A3A5A"/>
+                    </svg>
+                  </div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:{{ femaleColor }};">♀ HÉROE</div>
+                </div>
+              </div>
+            </div>
+            <!-- Name + lore + CTA -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:16px;">
+              <div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;margin-bottom:8px;">NOMBRE</div>
+                <input type="text" value="{{ heroNameInput }}" onInput="{{ onNameInput }}" placeholder="Tu nombre..." maxlength="12" style="font-family:'Press Start 2P',monospace;font-size:9px;color:#EDE6D6;background:#2A2520;border:2px solid #C9A24B;padding:9px 12px;outline:none;width:100%;display:block;"/>
+              </div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;line-height:2.5;border-left:2px solid #C9A24B;padding-left:12px;">"Eres de Madre de Dios.<br/>Vuelves a casa."</div>
+              <div style="flex:1;"></div>
+              <div onClick="{{ onStartJourney }}" style="background:#D9A521;border:2px solid #C9A24B;padding:11px 18px;font-family:'Press Start 2P',monospace;font-size:8px;color:#14110E;cursor:pointer;text-align:center;" style-hover="background:#C9A24B;">Comenzar el viaje ▸</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========== INTRO NARRATIVE ========== -->
+      <sc-if value="{{ isIntro }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ onIntroNext }}" style="position:absolute;inset:0;background:#14110E;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;z-index:1;">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 35% 65%,rgba(46,125,58,.07),transparent 55%),radial-gradient(ellipse at 70% 30%,rgba(201,162,75,.04),transparent 55%);pointer-events:none;"></div>
+          <div style="font-size:52px;line-height:1;margin-bottom:26px;animation:yakuGlow 5s ease-in-out infinite;">🐍</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#EDE6D6;text-align:center;max-width:540px;line-height:2.7;padding:0 40px;animation:introFade .7s ease;">{{ introText }}</div>
+          <div style="position:absolute;bottom:24px;display:flex;gap:10px;">
+            <sc-for list="{{ introIndicators }}" as="dot" hint-placeholder-count="5">
+              <div style="width:6px;height:6px;background:#D9A521;opacity:{{ dot.opacity }};"></div>
+            </sc-for>
+          </div>
+          <div style="position:absolute;bottom:24px;right:18px;font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;animation:blink 1.6s infinite;">toca ▸</div>
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.1) 1px,rgba(0,0,0,.1) 2px);pointer-events:none;z-index:2;"></div>
+        </div>
+      </sc-if>
+
+      <!-- ========== WORLD MAP ========== -->
+      <sc-if value="{{ isWorldMap }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:#14110E;display:flex;flex-direction:column;z-index:1;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:linear-gradient(148deg,#192a18,#14110E 45%,#1a1a0e);"></div>
+          <!-- Header -->
+          <div style="position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:9px 14px;background:rgba(20,17,14,.88);border-bottom:1px solid rgba(201,162,75,.4);">
+            <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#EDE6D6;">MADRE DE DIOS</div>
+            <div style="display:flex;gap:14px;align-items:center;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;">Aliados: {{ allies }}</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#6FB23F;">🌱 ×{{ seeds }}</div>
+              <div onClick="{{ onOpenPause }}" style="font-family:'Press Start 2P',monospace;font-size:9px;color:#EDE6D6;cursor:pointer;padding:2px 6px;border:1px solid rgba(201,162,75,.3);">☰</div>
+            </div>
+          </div>
+          <!-- Map -->
+          <div style="flex:1;position:relative;display:flex;align-items:center;justify-content:center;">
+            <svg style="position:absolute;top:0;left:0;width:100%;height:100%;" viewBox="0 0 860 336" preserveAspectRatio="xMidYMid slice">
+              <rect width="860" height="336" fill="#192a18"/>
+              <ellipse cx="228" cy="168" rx="152" ry="98" fill="#1a3018" opacity=".72"/>
+              <ellipse cx="138" cy="218" rx="92" ry="74" fill="#162613" opacity=".6"/>
+              <ellipse cx="452" cy="246" rx="114" ry="64" fill="#2A2318" opacity=".9"/>
+              <path d="M78,173 Q200,146 338,166 Q460,183 568,160 Q658,141 778,153" fill="none" stroke="#3A5A68" stroke-width="8" opacity=".65"/>
+              <path d="M198,243 Q328,223 448,236 Q558,246 658,230" fill="none" stroke="#3A5A68" stroke-width="4" opacity=".4"/>
+              <path d="M598,160 Q563,198 452,230 Q378,253 328,256" fill="none" stroke="#4A3A22" stroke-width="3" stroke-dasharray="8,5" opacity=".65"/>
+              <line x1="604" y1="155" x2="453" y2="221" stroke="#C9A24B" stroke-width="1.5" stroke-dasharray="7,5" opacity=".5"/>
+              <line x1="604" y1="155" x2="672" y2="266" stroke="#C9A24B" stroke-width="1.5" stroke-dasharray="7,5" opacity=".28"/>
+              <line x1="238" y1="196" x2="332" y2="240" stroke="#C9A24B" stroke-width="1.5" stroke-dasharray="7,5" opacity=".28"/>
+              <line x1="156" y1="186" x2="238" y2="196" stroke="#C9A24B" stroke-width="1.5" stroke-dasharray="7,5" opacity=".28"/>
+            </svg>
+            <!-- Puerto Maldonado -->
+            <div onClick="{{ onZonePuerto }}" style="position:absolute;right:146px;top:78px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;z-index:20;">
+              <div style="width:22px;height:22px;background:#D9A521;display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 0 10px rgba(217,165,33,.65);">★</div>
+              <div style="background:rgba(20,17,14,.92);border:1px solid rgba(201,162,75,.5);padding:3px 6px;text-align:center;">
+                <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#EDE6D6;white-space:nowrap;">Pto. Maldonado</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#D9A521;margin-top:2px;">M1 · aquí ★</div>
+              </div>
+            </div>
+            <!-- La Pampa -->
+            <div onClick="{{ onZoneLaPampa }}" style="position:absolute;left:288px;bottom:58px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;z-index:20;">
+              <div style="width:22px;height:22px;background:#C8B500;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 0 8px rgba(200,181,0,.5);animation:mercPulse 2.2s infinite;">!</div>
+              <div style="background:rgba(20,17,14,.92);border:1px solid rgba(200,181,0,.55);padding:3px 6px;text-align:center;">
+                <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#EDE6D6;white-space:nowrap;">La Pampa</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#C8B500;margin-top:2px;">M2 · ENTRAR</div>
+              </div>
+            </div>
+            <!-- Río: locked -->
+            <div style="position:absolute;left:336px;top:80px;display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.38;z-index:20;">
+              <div style="width:18px;height:18px;background:#2A2520;border:1px solid #4A4440;display:flex;align-items:center;justify-content:center;font-size:9px;">🔒</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#9A8F7A;background:rgba(20,17,14,.8);padding:2px 4px;white-space:nowrap;">Río M.de Dios</div>
+            </div>
+            <!-- Amarakaeri: locked -->
+            <div style="position:absolute;left:185px;top:110px;display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.38;z-index:20;">
+              <div style="width:18px;height:18px;background:#2A2520;border:1px solid #4A4440;display:flex;align-items:center;justify-content:center;font-size:9px;">🔒</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#9A8F7A;background:rgba(20,17,14,.8);padding:2px 4px;white-space:nowrap;">Amarakaeri</div>
+            </div>
+            <!-- Manu: locked -->
+            <div style="position:absolute;left:100px;top:126px;display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.38;z-index:20;">
+              <div style="width:18px;height:18px;background:#2A2520;border:1px solid #4A4440;display:flex;align-items:center;justify-content:center;font-size:9px;">🔒</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#9A8F7A;background:rgba(20,17,14,.8);padding:2px 4px;white-space:nowrap;">Parque del Manu</div>
+            </div>
+            <!-- Tres Islas: locked -->
+            <div style="position:absolute;right:93px;bottom:50px;display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.38;z-index:20;">
+              <div style="width:18px;height:18px;background:#2A2520;border:1px solid #4A4440;display:flex;align-items:center;justify-content:center;font-size:9px;">🔒</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#9A8F7A;background:rgba(20,17,14,.8);padding:2px 4px;white-space:nowrap;">Tres Islas</div>
+            </div>
+          </div>
+          <!-- Bottom bar -->
+          <div style="position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:7px 14px;background:rgba(20,17,14,.82);border-top:1px solid rgba(201,162,75,.2);">
+            <div style="display:flex;gap:14px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#D9A521;">★ aquí</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#C8B500;">! misión activa</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;">🔒 bloqueada</div>
+            </div>
+            <div onClick="{{ onZoneLaPampa }}" style="background:#D9A521;border:2px solid #C9A24B;padding:7px 14px;font-family:'Press Start 2P',monospace;font-size:7px;color:#14110E;cursor:pointer;" style-hover="background:#C9A24B;">LA PAMPA ▸</div>
+          </div>
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.06) 1px,rgba(0,0,0,.06) 2px);pointer-events:none;z-index:5;"></div>
+        </div>
+      </sc-if>
+
+      <!-- ========== ZONE — LA PAMPA ========== -->
+      <sc-if value="{{ isZone }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;z-index:1;overflow:hidden;">
+
+          <!-- LA PAMPA BACKGROUND -->
+          <sc-if value="{{ isPampaSelected }}" hint-placeholder-val="{{ true }}">
+            <!-- Sky -->
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,#252820 0%,#1e2118 28%,#3A2E22 62%,#4A3A2A 100%);z-index:1;"></div>
+            <!-- Haze -->
+            <div style="position:absolute;bottom:148px;left:0;right:0;height:44px;background:linear-gradient(to top,rgba(107,104,98,.18),transparent);z-index:2;pointer-events:none;"></div>
+            <!-- Landscape SVG -->
+            <svg style="position:absolute;bottom:0;left:0;right:0;z-index:3;" width="860" height="214" viewBox="0 0 860 214" preserveAspectRatio="xMidYMax meet">
+              <rect x="0" y="110" width="860" height="104" fill="#4A3A2A"/>
+              <polygon points="0,110 50,96 112,109 178,91 244,106 308,87 372,104 436,89 500,108 562,91 626,105 692,88 757,102 822,90 860,98 860,110" fill="#5A4A3A"/>
+              <!-- Pits -->
+              <ellipse cx="150" cy="110" rx="70" ry="20" fill="#14110E" opacity=".9"/>
+              <ellipse cx="432" cy="112" rx="84" ry="21" fill="#14110E" opacity=".88"/>
+              <ellipse cx="718" cy="110" rx="60" ry="17" fill="#1a1510" opacity=".82"/>
+              <!-- Mercury pools -->
+              <ellipse cx="98" cy="113" rx="48" ry="11" fill="rgba(200,181,0,.44)"/>
+              <ellipse cx="298" cy="112" rx="38" ry="9" fill="rgba(200,181,0,.36)"/>
+              <ellipse cx="602" cy="114" rx="60" ry="13" fill="rgba(200,181,0,.48)"/>
+              <ellipse cx="804" cy="112" rx="42" ry="10" fill="rgba(200,181,0,.31)"/>
+              <!-- Machinery 1 -->
+              <rect x="184" y="64" width="60" height="50" fill="#14110E"/>
+              <rect x="202" y="42" width="9" height="28" fill="#0f0d0a" transform="rotate(-9,206,56)"/>
+              <rect x="168" y="110" width="92" height="7" fill="#0f0d0a"/>
+              <!-- Machinery 2 (big) -->
+              <rect x="630" y="48" width="78" height="66" fill="#110e0a"/>
+              <rect x="663" y="22" width="12" height="33" fill="#0a0806" transform="rotate(-11,669,38)"/>
+              <rect x="612" y="110" width="112" height="8" fill="#0a0806"/>
+              <!-- Shack -->
+              <rect x="362" y="78" width="44" height="36" fill="#1a1510"/>
+              <polygon points="356,78 384,61 412,78" fill="#201a14"/>
+              <!-- Neon: Cantina -->
+              <rect x="346" y="46" width="78" height="16" fill="#14110E" rx="1"/>
+              <text x="351" y="59" font-family="monospace" font-size="9" fill="#2FB6C4" filter="url(#n1)">CANTINA</text>
+              <!-- Neon: Oro -->
+              <rect x="500" y="42" width="60" height="16" fill="#14110E" rx="1"/>
+              <text x="503" y="55" font-family="monospace" font-size="9" fill="#C4356B">ORO $$$</text>
+              <defs>
+                <filter id="n1" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="1.5" result="b"/>
+                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+            </svg>
+          </sc-if>
+
+          <!-- PUERTO MALDONADO BACKGROUND -->
+          <sc-if value="{{ isPuertoSelected }}" hint-placeholder-val="{{ false }}">
+            <!-- Sky -->
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,#7C5C43 0%,#B07D3A 40%,#D49D5B 70%,#6E4B2A 100%);z-index:1;"></div>
+            <!-- Haze -->
+            <div style="position:absolute;bottom:148px;left:0;right:0;height:44px;background:linear-gradient(to top,rgba(176,125,58,0.22),transparent);z-index:2;pointer-events:none;"></div>
+            <!-- Landscape SVG -->
+            <svg style="position:absolute;bottom:0;left:0;right:0;z-index:3;" width="860" height="214" viewBox="0 0 860 214" preserveAspectRatio="xMidYMax meet">
+              <rect x="0" y="110" width="860" height="104" fill="#5A3E25"/>
+              <polygon points="0,110 860,110 860,116 0,122" fill="#4B321D"/>
+              <polygon points="0,110 32,102 78,106 130,95 186,105 240,92 310,104 380,88 440,102 510,91 580,105 640,94 700,103 760,89 820,101 860,95 860,110" fill="#3D2918"/>
+              
+              <!-- House 1 -->
+              <rect x="62" y="78" width="54" height="32" fill="#2E1E10"/>
+              <polygon points="56,78 90,62 122,78" fill="#8E6A4B"/>
+              <rect x="74" y="90" width="12" height="20" fill="#1C1008"/>
+              <rect x="98" y="86" width="10" height="10" fill="#B07D3A"/>
+
+              <!-- House 2 -->
+              <rect x="220" y="70" width="70" height="40" fill="#291A0E"/>
+              <polygon points="214,70 255,54 296,70" fill="#5E4E42"/>
+              <rect x="242" y="82" width="14" height="28" fill="#150C06"/>
+              <!-- Gold Sign -->
+              <rect x="230" y="74" width="50" height="12" fill="#14110E" rx="1"/>
+              <text x="234" y="83" font-family="monospace" font-size="7" fill="#D9A521">COMPRO ORO</text>
+
+              <!-- House 3 -->
+              <rect x="520" y="75" width="60" height="35" fill="#2E1E10"/>
+              <polygon points="512,75 550,58 588,75" fill="#8E6A4B"/>
+              <rect x="540" y="85" width="12" height="25" fill="#150C06"/>
+              
+              <!-- Mototaxis -->
+              <g transform="translate(140, 92)" fill="#14110E">
+                <rect x="4" y="2" width="22" height="14" rx="2"/>
+                <rect x="1" y="8" width="5" height="8" rx="1"/>
+                <circle cx="6" cy="16" r="3"/>
+                <circle cx="20" cy="16" r="3"/>
+                <circle cx="2" cy="16" r="2"/>
+                <rect x="8" y="4" width="14" height="8" fill="#5A3E25"/>
+              </g>
+              <g transform="translate(430, 95)" fill="#14110E">
+                <rect x="4" y="2" width="22" height="14" rx="2"/>
+                <rect x="1" y="8" width="5" height="8" rx="1"/>
+                <circle cx="6" cy="16" r="3"/>
+                <circle cx="20" cy="16" r="3"/>
+                <circle cx="2" cy="16" r="2"/>
+                <rect x="8" y="4" width="14" height="8" fill="#5A3E25"/>
+              </g>
+
+              <!-- Pole & Wires -->
+              <rect x="360" y="28" width="4" height="82" fill="#14110E"/>
+              <rect x="344" y="34" width="36" height="3" fill="#14110E"/>
+              <path d="M0,38 Q180,50 362,35" fill="none" stroke="#14110E" stroke-width="1" opacity=".7"/>
+              <path d="M362,35 Q610,48 860,38" fill="none" stroke="#14110E" stroke-width="1" opacity=".7"/>
+              <path d="M0,48 Q180,62 362,37" fill="none" stroke="#14110E" stroke-width="1" opacity=".5"/>
+              
+              <!-- Foliage -->
+              <path d="M0,60 C20,70 30,90 40,110 L0,110 Z" fill="#263E1D"/>
+              <path d="M820,110 C830,90 840,70 860,60 L860,110 Z" fill="#263E1D"/>
+            </svg>
+          </sc-if>
+
+          <!-- DOÑA ESPERANZA NPC -->
+          <div onClick="{{ onTalkNPC }}" style="position:absolute;bottom:162px;left:250px;z-index:10;cursor:pointer;">
+            <div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-family:'Press Start 2P',monospace;font-size:12px;color:#D9A521;animation:blink 1.1s infinite;white-space:nowrap;line-height:1;">!</div>
+            <svg width="22" height="30" viewBox="0 0 11 15" style="image-rendering:pixelated;display:block;">
+              <rect x="2" y="0" width="7" height="6" fill="#8A5A3A"/>
+              <rect x="1" y="0" width="9" height="2" fill="#5A3010"/>
+              <rect x="1" y="2" width="2" height="5" fill="#5A3010"/>
+              <!-- Shading face -->
+              <rect x="6.5" y="2" width="2.5" height="4" fill="#71482E"/>
+              <rect x="3" y="2" width="2" height="2" fill="#14110E"/>
+              <rect x="6" y="2" width="2" height="2" fill="#14110E"/>
+              <!-- Dress -->
+              <rect x="0" y="6" width="11" height="6" fill="#7A3A5A"/>
+              <rect x="6" y="6" width="5" height="6" fill="#5E2A44"/>
+              <rect x="2" y="8" width="7" height="1" fill="rgba(255,255,255,.2)"/>
+              <!-- Arms -->
+              <rect x="0" y="7" width="1.5" height="4" fill="#8A5A3A"/>
+              <rect x="9.5" y="7" width="1.5" height="4" fill="#71482E"/>
+              <!-- Feet -->
+              <rect x="1" y="12" width="4" height="3" fill="#5A2A3A"/>
+              <rect x="6" y="12" width="4" height="3" fill="#441F2B"/>
+            </svg>
+          </div>
+
+          <!-- HERO -->
+          <div style="position:absolute;bottom:162px;left:390px;z-index:11;animation:heroFloat 1.3s ease-in-out infinite;">
+            <svg width="22" height="30" viewBox="0 0 11 15" style="image-rendering:pixelated;display:block;">
+              <!-- Hair / Cap -->
+              <rect x="2" y="0" width="7" height="6" fill="#B07D3A"/>
+              <rect x="2" y="0" width="7" height="2" fill="#3A2010"/>
+              <rect x="7.5" y="0" width="1.5" height="6" fill="#8F622C"/>
+              <!-- Eyes -->
+              <rect x="3" y="2" width="2" height="2" fill="#14110E"/>
+              <rect x="6" y="2" width="2" height="2" fill="#14110E"/>
+              <!-- Torso -->
+              <rect x="0" y="6" width="11" height="6" fill="#4A6080"/>
+              <rect x="6" y="6" width="5" height="6" fill="#384961"/>
+              <rect x="3" y="8" width="5" height="2" fill="#2A3040"/>
+              <!-- Arms -->
+              <rect x="0" y="7" width="1.5" height="4" fill="#B07D3A"/>
+              <rect x="9.5" y="7" width="1.5" height="4" fill="#90652D"/>
+              <!-- Pants -->
+              <rect x="1" y="12" width="4" height="3" fill="#2A3A50"/>
+              <rect x="6" y="12" width="4" height="3" fill="#1D2A3B"/>
+            </svg>
+          </div>
+
+          <!-- GUARD (patrolling) -->
+          <sc-if value="{{ isPampaSelected }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;bottom:162px;right:170px;z-index:9;animation:guardMove 5s ease-in-out infinite;">
+              <div style="position:absolute;top:5px;right:22px;width:54px;height:22px;background:rgba(200,181,0,.07);clip-path:polygon(100% 50%,0 0,0 100%);pointer-events:none;"></div>
+              <svg width="22" height="30" viewBox="0 0 11 15" style="image-rendering:pixelated;display:block;">
+                <rect x="2" y="0" width="7" height="6" fill="#6B4A3A"/>
+                <rect x="2" y="0" width="7" height="2" fill="#2A1A10"/>
+                <rect x="6.5" y="2" width="2.5" height="4" fill="#54392B"/>
+                <rect x="3" y="2" width="2" height="2" fill="#14110E"/>
+                <rect x="6" y="2" width="2" height="2" fill="#14110E"/>
+                <rect x="0" y="6" width="11" height="6" fill="#3A3A2A"/>
+                <rect x="6" y="6" width="5" height="6" fill="#2B2B1E"/>
+                <rect x="0" y="7" width="1.5" height="4" fill="#6B4A3A"/>
+                <rect x="9.5" y="7" width="1.5" height="4" fill="#54392B"/>
+                <rect x="1" y="12" width="4" height="3" fill="#2A2A1A"/>
+                <rect x="6" y="12" width="4" height="3" fill="#1F1F13"/>
+              </svg>
+            </div>
+          </sc-if>
+
+          <!-- Atmospheric overlays -->
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 48%,rgba(107,104,98,.1) 100%);pointer-events:none;z-index:4;"></div>
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.12) 1px,rgba(0,0,0,.12) 2px);pointer-events:none;z-index:5;"></div>
+
+          <!-- ====== HUD TOP ====== -->
+          <div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:rgba(20,17,14,.82);border-bottom:1px solid rgba(201,162,75,.3);z-index:40;">
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;">{{ heroName }}</div>
+              <div style="display:flex;gap:3px;align-items:center;">
+                <sc-for list="{{ livesArr }}" as="leaf" hint-placeholder-count="3">
+                  <svg width="11" height="11" viewBox="0 0 11 11" style="display:block;"><polygon points="5.5,0 11,4.2 9,11 2,11 0,4.2" fill="{{ leaf.color }}"/></svg>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:2px;align-items:center;">
+                <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#3FA7B2;margin-right:2px;">VÍN</div>
+                <sc-for list="{{ vinculoArr }}" as="seg" hint-placeholder-count="5">
+                  <div style="width:9px;height:5px;background:{{ seg.color }};"></div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9A8F7A;letter-spacing:1px;">{{ zoneName }}</div>
+            <div onClick="{{ onOpenPause }}" style="font-family:'Press Start 2P',monospace;font-size:10px;color:#EDE6D6;cursor:pointer;padding:2px 8px;border:1px solid rgba(201,162,75,.3);">☰</div>
+          </div>
+
+          <!-- Mission complete banner -->
+          <sc-if value="{{ misionComplete }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ onMisionComplete }}" style="position:absolute;top:42px;left:0;right:0;background:#D9A521;padding:7px;font-family:'Press Start 2P',monospace;font-size:6px;color:#14110E;text-align:center;cursor:pointer;z-index:42;animation:blink 2s infinite;">✓ MISIÓN COMPLETADA — Toca para volver al mapa ▸</div>
+          </sc-if>
+
+          <!-- Evidence counter + detect button -->
+          <div style="position:absolute;top:48px;left:10px;background:rgba(42,37,32,.82);border:1px solid rgba(201,162,75,.3);padding:3px 8px;font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;z-index:40;">📷 ×{{ evidenceCount }}</div>
+          <div onClick="{{ onDetectSimulate }}" style="position:absolute;top:48px;right:10px;background:rgba(180,55,0,.82);border:1px solid #C8B500;padding:3px 7px;font-family:'Press Start 2P',monospace;font-size:4px;color:#EDE6D6;cursor:pointer;z-index:40;">⚠ simular detección</div>
+
+          <!-- ====== CONTROLS BOTTOM ====== -->
+          <div style="position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:8px 16px 10px;z-index:40;">
+            <!-- Joystick -->
+            <div style="position:relative;width:72px;height:72px;">
+              <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(201,162,75,.3);background:rgba(42,37,32,.55);"></div>
+              <div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);font-family:'Press Start 2P',monospace;font-size:9px;color:rgba(201,162,75,.45);line-height:1;">▲</div>
+              <div style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-family:'Press Start 2P',monospace;font-size:9px;color:rgba(201,162,75,.45);line-height:1;">▼</div>
+              <div style="position:absolute;top:50%;left:4px;transform:translateY(-50%);font-family:'Press Start 2P',monospace;font-size:9px;color:rgba(201,162,75,.45);line-height:1;">◀</div>
+              <div style="position:absolute;top:50%;right:4px;transform:translateY(-50%);font-family:'Press Start 2P',monospace;font-size:9px;color:rgba(201,162,75,.45);line-height:1;">▶</div>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:#2A2520;border:2px solid rgba(201,162,75,.35);"></div>
+            </div>
+            <!-- Skill + action buttons -->
+            <div style="display:flex;flex-direction:column;gap:7px;align-items:flex-end;">
+              <div style="display:flex;gap:6px;align-items:center;">
+                <div onClick="{{ onObservar }}" style="width:32px;height:32px;background:rgba(42,37,32,.88);border:1.5px solid rgba(201,162,75,.45);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:1px;" style-active="background:rgba(217,165,33,.25);">
+                  <div style="font-size:14px;line-height:1;">👁</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:3px;color:#9A8F7A;">OBS</div>
+                </div>
+                <div onClick="{{ onDocumentar }}" style="width:32px;height:32px;background:rgba(42,37,32,.88);border:1.5px solid rgba(201,162,75,.45);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:1px;" style-active="background:rgba(217,165,33,.25);">
+                  <div style="font-size:14px;line-height:1;">📷</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:3px;color:#9A8F7A;">DOC</div>
+                </div>
+                <div onClick="{{ onToggleSkillWheel }}" style="width:32px;height:32px;background:rgba(42,37,32,.88);border:1.5px solid #D9A521;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-active="background:rgba(217,165,33,.25);">
+                  <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#D9A521;">✦</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <div style="width:34px;height:34px;background:rgba(42,37,32,.88);border:1.5px solid rgba(201,162,75,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                  <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9A8F7A;">B</div>
+                </div>
+                <div onClick="{{ onTalkNPC }}" style="width:46px;height:46px;background:rgba(217,165,33,.2);border:2px solid #D9A521;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-active="background:rgba(217,165,33,.4);">
+                  <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#D9A521;">A</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====== DIALOGUE OVERLAY ====== -->
+          <sc-if value="{{ isDialogue }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;z-index:50;display:flex;flex-direction:column;justify-content:flex-end;">
+              <div style="position:absolute;bottom:0;left:0;right:0;height:140px;background:linear-gradient(to top,rgba(20,17,14,.72),transparent);pointer-events:none;"></div>
+              <div onClick="{{ onDlgNext }}" style="position:relative;margin:0 8px 88px;background:#2A2520;border:2px solid #C9A24B;box-shadow:inset 0 0 0 2px #2A2520, inset 0 0 0 3px #C9A24B, 5px 5px 0px rgba(0, 0, 0, 0.5);cursor:pointer;outline:none;">
+                <div style="position:absolute;top:-20px;left:14px;background:#C9A24B;border:2px solid #C9A24B;border-bottom:none;box-shadow:2px -2px 0px rgba(0,0,0,0.3);padding:3px 10px;font-family:'Press Start 2P',monospace;font-size:6px;color:#14110E;">{{ dlgName }}</div>
+                <div style="padding:14px 16px 14px;">
+                  <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;margin-bottom:8px;">{{ dlgRole }}</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#EDE6D6;line-height:2.3;padding-right:24px;">{{ dlgLine }}</div>
+                  <div style="position:absolute;bottom:10px;right:12px;font-family:'Press Start 2P',monospace;font-size:12px;color:#D9A521;"><span class="arrow-next">▸</span></div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ====== SKILL WHEEL ====== -->
+          <sc-if value="{{ isSkillWheel }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;background:rgba(20,17,14,.72);display:flex;align-items:center;justify-content:center;z-index:50;">
+              <div style="position:relative;width:196px;height:196px;">
+                <svg style="position:absolute;inset:0;pointer-events:none;" width="196" height="196" viewBox="0 0 196 196">
+                  <line x1="98" y1="98" x2="98" y2="30" stroke="rgba(201,162,75,.28)" stroke-width="1" stroke-dasharray="4,3"/>
+                  <line x1="98" y1="98" x2="166" y2="98" stroke="rgba(201,162,75,.28)" stroke-width="1" stroke-dasharray="4,3"/>
+                  <line x1="98" y1="98" x2="98" y2="166" stroke="rgba(63,167,178,.28)" stroke-width="1" stroke-dasharray="4,3"/>
+                  <line x1="98" y1="98" x2="30" y2="98" stroke="rgba(111,178,63,.28)" stroke-width="1" stroke-dasharray="4,3"/>
+                </svg>
+                <!-- Hub -->
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:#2A2520;border:2px solid #C9A24B;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:5;">
+                  <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#C9A24B;text-align:center;line-height:1.7;">HABI-<br/>LIDAD</div>
+                </div>
+                <!-- TOP: Observar -->
+                <div onClick="{{ onObservar }}" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:58px;height:58px;background:#2A2520;border:2px solid #C9A24B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;" style-hover="background:#3A3228;">
+                  <div style="font-size:20px;line-height:1;">👁</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#EDE6D6;">OBSERVAR</div>
+                </div>
+                <!-- RIGHT: Documentar -->
+                <div onClick="{{ onDocumentar }}" style="position:absolute;top:50%;right:0;transform:translateY(-50%);width:58px;height:58px;background:#2A2520;border:2px solid #C9A24B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;" style-hover="background:#3A3228;">
+                  <div style="font-size:20px;line-height:1;">📷</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#EDE6D6;">DOCUM.</div>
+                </div>
+                <!-- BOTTOM: Yaku -->
+                <div onClick="{{ onYaku }}" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:58px;height:58px;background:#2A2520;border:2px solid #3FA7B2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;" style-hover="background:#1A3A40;">
+                  <div style="font-size:20px;line-height:1;">🐍</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#3FA7B2;">YAKU</div>
+                </div>
+                <!-- LEFT: Sembrar -->
+                <div onClick="{{ onSembrar }}" style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:58px;height:58px;background:#2A2520;border:2px solid #6FB23F;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;" style-hover="background:#1A2A15;">
+                  <div style="font-size:20px;line-height:1;">🌱</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#6FB23F;">SEMBRAR</div>
+                </div>
+                <!-- Close -->
+                <div onClick="{{ onToggleSkillWheel }}" style="position:absolute;top:-28px;right:-28px;font-family:'Press Start 2P',monospace;font-size:7px;color:#9A8F7A;cursor:pointer;background:#2A2520;border:1px solid #4A4440;padding:4px 8px;">✕</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ====== TESTIMONY MODAL ====== -->
+          <sc-if value="{{ isTestimony }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;background:rgba(20,17,14,.9);display:flex;align-items:center;justify-content:center;z-index:60;">
+              <div style="background:#2A2520;border:2px solid #C9A24B;padding:22px;max-width:420px;width:92%;position:relative;">
+                <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9A8F7A;margin-bottom:14px;text-align:center;letter-spacing:2px;">TESTIMONIO RECIBIDO</div>
+                <div style="height:1px;background:#C9A24B;margin-bottom:16px;"></div>
+                <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;">
+                  <div style="width:48px;height:48px;background:#1a1510;border:1px solid #C9A24B;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;">👤</div>
+                  <div>
+                    <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#EDE6D6;margin-bottom:4px;">Doña Esperanza</div>
+                    <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;margin-bottom:3px;">Comunidad Shipibo</div>
+                    <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;">Puerto Maldonado</div>
+                  </div>
+                </div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#EDE6D6;line-height:2.4;margin-bottom:16px;border-left:2px solid #C9A24B;padding-left:12px;">"El río antes era azul.<br/>Ahora ni los peces se atreven a subir."</div>
+                <div style="display:flex;align-items:center;gap:8px;background:rgba(111,178,63,.1);border:1px solid #6FB23F;padding:7px 10px;margin-bottom:14px;">
+                  <div style="font-size:12px;">📖</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#6FB23F;">GUARDADO EN EL DIARIO</div>
+                </div>
+                <div onClick="{{ onCloseTestimony }}" style="background:#D9A521;border:2px solid #C9A24B;padding:9px 20px;font-family:'Press Start 2P',monospace;font-size:7px;color:#14110E;cursor:pointer;text-align:center;" style-hover="background:#C9A24B;">Guardar y continuar</div>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </sc-if>
+
+      <!-- ========== PAUSE MENU ========== -->
+      <sc-if value="{{ isPause }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:rgba(20,17,14,.97);display:flex;align-items:center;justify-content:center;z-index:1;">
+          <div style="background:#2A2520;border:2px solid #C9A24B;box-shadow:inset 0 0 0 2px #2A2520, inset 0 0 0 3px #C9A24B, 5px 5px 0px rgba(0, 0, 0, 0.45);padding:20px 36px;min-width:260px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#EDE6D6;margin-bottom:18px;text-align:center;border-bottom:1px solid rgba(201,162,75,.3);padding-bottom:12px;">PAUSA</div>
+            <div onClick="{{ onResume }}" class="retro-menu-item" style="border-bottom:1px solid rgba(201,162,75,.2);"><span class="menu-cursor">▸</span><span>Reanudar</span></div>
+            <div onClick="{{ onOpenDiary }}" class="retro-menu-item" style="border-bottom:1px solid rgba(201,162,75,.2);"><span class="menu-cursor">▸</span><span>Diario</span></div>
+            <div onClick="{{ onOpenExpediente }}" class="retro-menu-item" style="border-bottom:1px solid rgba(201,162,75,.2);"><span class="menu-cursor">▸</span><span>Expediente</span></div>
+            <div class="retro-menu-item" style="border-bottom:1px solid rgba(201,162,75,.15);opacity:0.6;"><span class="menu-cursor">▸</span><span>Ajustes</span></div>
+            <div onClick="{{ onBackMap }}" class="retro-menu-item"><span class="menu-cursor">▸</span><span>Salir al mapa</span></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========== DIARY ========== -->
+      <sc-if value="{{ isDiary }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:#14110E;display:flex;flex-direction:column;z-index:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:2px solid #C9A24B;background:#2A2520;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#EDE6D6;">DIARIO</div>
+            <div onClick="{{ onBackZone }}" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9A8F7A;cursor:pointer;" style-hover="color:#EDE6D6;">✕</div>
+          </div>
+          <div style="display:flex;border-bottom:1px solid rgba(201,162,75,.3);">
+            <div onClick="{{ onTabTest }}" style="flex:1;padding:8px;font-family:'Press Start 2P',monospace;font-size:6px;text-align:center;cursor:pointer;color:{{ tabTestColor }};border-bottom:{{ tabTestBorder }};">TESTIMONIOS</div>
+            <div onClick="{{ onTabLug }}" style="flex:1;padding:8px;font-family:'Press Start 2P',monospace;font-size:6px;text-align:center;cursor:pointer;color:{{ tabLugColor }};border-bottom:{{ tabLugBorder }};">LUGARES</div>
+          </div>
+          <div style="flex:1;padding:12px;overflow-y:auto;">
+            <sc-if value="{{ isTabTest }}" hint-placeholder-val="{{ true }}">
+              <sc-if value="{{ hasTestimonies }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:12px;padding:11px;border:1px solid rgba(201,162,75,.38);margin-bottom:8px;background:rgba(42,37,32,.5);cursor:pointer;">
+                  <div style="width:32px;height:32px;background:#1a1510;border:1px solid #C9A24B;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">👤</div>
+                  <div>
+                    <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#EDE6D6;margin-bottom:4px;">Doña Esperanza</div>
+                    <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;">Puerto Maldonado · Shipibo</div>
+                  </div>
+                </div>
+              </sc-if>
+              <div style="display:flex;gap:12px;padding:11px;border:1px solid rgba(42,37,32,.5);margin-bottom:8px;opacity:.35;">
+                <div style="width:32px;height:32px;background:#1a1510;border:1px solid #2A2520;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🔒</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9A8F7A;display:flex;align-items:center;">— aún no escuchado</div>
+              </div>
+              <div style="display:flex;gap:12px;padding:11px;border:1px solid rgba(42,37,32,.5);margin-bottom:8px;opacity:.35;">
+                <div style="width:32px;height:32px;background:#1a1510;border:1px solid #2A2520;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🔒</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9A8F7A;display:flex;align-items:center;">— aún no escuchado</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isTabLug }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:12px;padding:11px;border:1px solid rgba(201,162,75,.38);margin-bottom:8px;background:rgba(42,37,32,.5);">
+                <div style="font-size:18px;flex-shrink:0;">🏙</div>
+                <div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#EDE6D6;margin-bottom:4px;">Puerto Maldonado</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#C8B500;">La Ciudad Gris · visitada</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;padding:11px;border:1px solid rgba(42,37,32,.5);opacity:.35;">
+                <div style="font-size:18px;flex-shrink:0;">🔒</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9A8F7A;display:flex;align-items:center;">— aún no visitado</div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="padding:8px 14px;border-top:1px solid rgba(201,162,75,.18);">
+            <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;text-align:center;">"Lo que el héroe vio queda aquí."</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========== EXPEDIENTE ========== -->
+      <sc-if value="{{ isExpediente }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:#14110E;display:flex;flex-direction:column;z-index:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:2px solid #C9A24B;background:#2A2520;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#EDE6D6;">EXPEDIENTE</div>
+            <div onClick="{{ onBackZone }}" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9A8F7A;cursor:pointer;" style-hover="color:#EDE6D6;">✕</div>
+          </div>
+          <div style="flex:1;padding:14px;overflow-y:auto;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;margin-bottom:14px;line-height:2.2;">Evidencia reunida para la denuncia:</div>
+            <sc-for list="{{ evidence }}" as="item" hint-placeholder-count="2">
+              <div style="display:flex;gap:12px;padding:10px;border:1px solid rgba(201,162,75,.4);margin-bottom:8px;background:rgba(42,37,32,.5);">
+                <div style="font-size:18px;flex-shrink:0;">📷</div>
+                <div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;margin-bottom:4px;">{{ item.name }}</div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;">{{ item.zone }}</div>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ hasNoEvidence }}" hint-placeholder-val="{{ false }}">
+              <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;text-align:center;padding:36px 20px;line-height:2.6;border:1px dashed rgba(201,162,75,.2);">Usa 📷 Documentar<br/>para reunir evidencia.<br/><br/>Necesitas evidencia<br/>para la denuncia final.</div>
+            </sc-if>
+          </div>
+          <div style="padding:0 14px 14px;">
+            <div onClick="{{ onGoEnding }}" style="background:#D9A521;border:2px solid #C9A24B;box-shadow:inset 0 0 0 1px #2A2520, inset 0 0 0 2px #C9A24B, 3px 3px 0px rgba(0,0,0,0.4);padding:10px;font-family:'Press Start 2P',monospace;font-size:7px;color:#14110E;cursor:pointer;text-align:center;opacity:{{ expBtnOpacity }};" style-hover="background:#C9A24B;">Presentar denuncia ▸</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========== ENDING ========== -->
+      <sc-if value="{{ isEnding }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:#14110E;display:flex;flex-direction:column;overflow:hidden;z-index:1;">
+          <div style="height:3px;background:linear-gradient(to right,#6FB23F,#D9A521,#C8B500,#C4356B);flex-shrink:0;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;padding:16px 20px;gap:12px;overflow-y:auto;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#EDE6D6;text-align:center;letter-spacing:2px;">MADRE DE DIOS</div>
+            <div style="display:flex;gap:12px;">
+              <div style="flex:1;background:#2A2520;border:2px solid #6FB23F;padding:14px;">
+                <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#6FB23F;margin-bottom:12px;letter-spacing:1px;">LO QUE LOGRASTE</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;justify-content:space-between;font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;"><span>Aliados</span><span style="color:#D9A521;">{{ allies }}</span></div>
+                  <div style="display:flex;justify-content:space-between;font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;"><span>Evidencia</span><span style="color:#D9A521;">{{ evidenceCount }}</span></div>
+                  <div style="display:flex;justify-content:space-between;font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;"><span>Testimonios</span><span style="color:#D9A521;">{{ testimonyCount }}</span></div>
+                  <div style="display:flex;justify-content:space-between;font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;"><span>Semillas</span><span style="color:#6FB23F;">{{ seeds }}</span></div>
+                </div>
+              </div>
+              <div style="flex:1;background:#2A2520;border:2px solid #C4356B;padding:14px;">
+                <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#C4356B;margin-bottom:12px;letter-spacing:1px;">LO QUE NO VOLVIÓ</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;justify-content:space-between;font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;"><span>Zonas perdidas</span><span style="color:#C8B500;">2</span></div>
+                  <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9A8F7A;line-height:2.2;margin-top:4px;">Personas que ya<br/>no están...</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:rgba(42,37,32,.6);border:1px solid rgba(201,162,75,.3);padding:10px;">
+              <div style="font-family:'Press Start 2P',monospace;font-size:5.5px;color:#EDE6D6;line-height:2.3;">Madre de Dios hoy: más de 300,000 ha devastadas en 20 años. La lucha de sus comunidades continúa.</div>
+            </div>
+            <div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#9A8F7A;margin-bottom:7px;">Apoya:</div>
+              <div style="display:flex;gap:7px;flex-wrap:wrap;">
+                <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#D9A521;border:1px solid rgba(217,165,33,.4);padding:3px 7px;">FENAMAD</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#D9A521;border:1px solid rgba(217,165,33,.4);padding:3px 7px;">SERNANP</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#D9A521;border:1px solid rgba(217,165,33,.4);padding:3px 7px;">CINCIA</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#D9A521;border:1px solid rgba(217,165,33,.4);padding:3px 7px;">DAR</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#D9A521;border:1px solid rgba(217,165,33,.4);padding:3px 7px;">MAAP</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <div style="flex:1;background:rgba(42,37,32,.8);border:2px solid #C9A24B;padding:9px;font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;cursor:pointer;text-align:center;" style-hover="background:#3A3228;">Compartir la causa</div>
+              <div onClick="{{ onBackMap }}" style="flex:1;background:#D9A521;border:2px solid #C9A24B;padding:9px;font-family:'Press Start 2P',monospace;font-size:6px;color:#14110E;cursor:pointer;text-align:center;" style-hover="background:#C9A24B;">Volver al mapa ▸</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ========== GLOBAL TOAST ========== -->
+      <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;top:54px;left:50%;transform:translateX(-50%);background:#2A2520;border:2px solid #C9A24B;padding:7px 14px;font-family:'Press Start 2P',monospace;font-size:6px;color:#EDE6D6;z-index:999;white-space:nowrap;animation:toastIn .25s ease;pointer-events:none;">{{ toastMsg }}</div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:660}}">
+class Component extends DCLogic {
+  _dialogues = {
+    dona_esperanza: {
+      name: 'Doña Esperanza',
+      role: 'Comunidad Shipibo · Puerto Maldonado',
+      lines: [
+        'El río antes era azul. Ahora ni los peces se atreven a subir.',
+        'Mis hijos crecieron con ese río. Mis nietos ya no pueden bañarse en él.',
+        '¿Eres de aquí? Entonces ya lo sabes. Ya lo viste. Documéntalo.'
+      ]
+    }
+  };
+  _toastTimer = null;
+
+  state = {
+    screen: 'splash',
+    overlay: null,
+    heroGender: 'male',
+    heroNameInput: '',
+    heroName: 'Héroe',
+    lives: 3,
+    vinculo: 4,
+    seeds: 2,
+    allies: 0,
+    evidence: [],
+    testimonies: [],
+    introStep: 0,
+    selectedZone: 'la_pampa',
+    diaryTab: 'testimonios',
+    currentDialogue: null,
+    dialogueStep: 0,
+    toastMsg: '',
+    toastVisible: false,
+  };
+
+  _goto(screen, extras = {}) {
+    this.setState({ screen, overlay: null, ...extras });
+  }
+
+  _toast(msg) {
+    if (this._toastTimer) clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.setState({ toastVisible: false }), 2800);
+    this.setState({ toastMsg: msg, toastVisible: true });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const dlg = s.currentDialogue ? this._dialogues[s.currentDialogue] : null;
+    const dlgStep = dlg ? Math.min(s.dialogueStep, dlg.lines.length - 1) : 0;
+
+    const livesArr = Array.from({ length: 3 }, (_, i) => ({ color: i < s.lives ? '#6FB23F' : '#3A4A2A' }));
+    const vinculoArr = Array.from({ length: 5 }, (_, i) => ({ color: i < s.vinculo ? '#3FA7B2' : '#1A3A40' }));
+    const introTexts = [
+      s.heroName + '...',
+      'Madre de Dios fue el pulmón verde del mundo.',
+      'Ríos cristalinos. Bosques infinitos.',
+      'Llevas años fuera. Hoy regresas.',
+      'Lo que encuentras no se parece a tu memoria.',
+    ];
+    const introIndicators = [0,1,2,3,4].map(i => ({ opacity: i <= s.introStep ? '1' : '0.3' }));
+
+    return {
+      isSplash:      s.screen === 'splash',
+      isMenu:        s.screen === 'menu',
+      isCreate:      s.screen === 'create',
+      isIntro:       s.screen === 'intro',
+      isWorldMap:    s.screen === 'world_map',
+      isZone:        s.screen === 'zone',
+      isPause:       s.screen === 'pause',
+      isDiary:       s.screen === 'diary',
+      isExpediente:  s.screen === 'expediente',
+      isEnding:      s.screen === 'ending',
+
+      isDialogue:    s.overlay === 'dialogue',
+      isSkillWheel:  s.overlay === 'skill_wheel',
+      isTestimony:   s.overlay === 'testimony',
+
+      heroName:      s.heroName,
+      heroNameInput: s.heroNameInput,
+      maleColor:     s.heroGender === 'male' ? '#D9A521' : '#9A8F7A',
+      femaleColor:   s.heroGender === 'female' ? '#D9A521' : '#9A8F7A',
+      maleBorder:    s.heroGender === 'male' ? '#D9A521' : 'rgba(201,162,75,0.2)',
+      femaleBorder:  s.heroGender === 'female' ? '#D9A521' : 'rgba(201,162,75,0.2)',
+
+      lives:         s.lives,
+      vinculo:       s.vinculo,
+      seeds:         s.seeds,
+      allies:        s.allies,
+      evidence:      s.evidence,
+      evidenceCount: s.evidence.length,
+      hasNoEvidence: s.evidence.length === 0,
+      testimonyCount: s.testimonies.length,
+      hasTestimonies: s.testimonies.length > 0,
+      misionComplete: s.evidence.length >= 2,
+      isPampaSelected: s.selectedZone === 'la_pampa',
+      isPuertoSelected: s.selectedZone === 'puerto_maldonado',
+
+      livesArr,
+      vinculoArr,
+      introText:       introTexts[Math.min(s.introStep, introTexts.length - 1)],
+      introIndicators,
+
+      zoneName: s.selectedZone === 'la_pampa' ? 'LA PAMPA' : 'PUERTO MALDONADO',
+
+      dlgName: dlg ? dlg.name : '',
+      dlgRole: dlg ? dlg.role : '',
+      dlgLine: dlg ? dlg.lines[dlgStep] : '',
+
+      isTabTest:       s.diaryTab === 'testimonios',
+      isTabLug:        s.diaryTab === 'lugares',
+      tabTestColor:    s.diaryTab === 'testimonios' ? '#D9A521' : '#9A8F7A',
+      tabLugColor:     s.diaryTab === 'lugares'     ? '#D9A521' : '#9A8F7A',
+      tabTestBorder:   s.diaryTab === 'testimonios' ? '2px solid #D9A521' : '2px solid transparent',
+      tabLugBorder:    s.diaryTab === 'lugares'     ? '2px solid #D9A521' : '2px solid transparent',
+
+      toastMsg:    s.toastMsg,
+      toastVisible: s.toastVisible,
+      expBtnOpacity: s.evidence.length >= 1 ? '1' : '0.4',
+
+      // ── Handlers ──
+      onSplashTap:    () => this._goto('menu'),
+      onNewGame:      () => this._goto('create'),
+      onContinue:     () => this._goto('world_map', { heroName: 'Raíz' }),
+      onSelectMale:   () => this.setState({ heroGender: 'male' }),
+      onSelectFemale: () => this.setState({ heroGender: 'female' }),
+      onNameInput:    (e) => this.setState({ heroNameInput: e.target.value }),
+      onStartJourney: () => {
+        const name = this.state.heroNameInput.trim() || 'Viajero';
+        this.setState({ heroName: name, screen: 'intro', introStep: 0, overlay: null });
+      },
+      onIntroNext: () => {
+        const n = this.state.introStep + 1;
+        n >= 5 ? this._goto('world_map') : this.setState({ introStep: n });
+      },
+      onZoneLaPampa: () => this._goto('zone', { selectedZone: 'la_pampa' }),
+      onZonePuerto:  () => this._goto('zone', { selectedZone: 'puerto_maldonado' }),
+      onOpenPause:   () => this._goto('pause'),
+      onResume:      () => this._goto('zone'),
+      onOpenDiary:   () => this._goto('diary'),
+      onOpenExpediente: () => this._goto('expediente'),
+      onBackMap:     () => this._goto('world_map'),
+      onBackZone:    () => this._goto('zone'),
+      onTalkNPC:     () => this.setState({ overlay: 'dialogue', currentDialogue: 'dona_esperanza', dialogueStep: 0 }),
+
+      onDlgNext: () => {
+        const { currentDialogue, dialogueStep, testimonies } = this.state;
+        const d = this._dialogues[currentDialogue];
+        if (!d) return this.setState({ overlay: null });
+        if (dialogueStep < d.lines.length - 1) {
+          this.setState({ dialogueStep: dialogueStep + 1 });
+        } else if (!testimonies.includes(currentDialogue)) {
+          this.setState({ testimonies: [...testimonies, currentDialogue], overlay: 'testimony', dialogueStep: 0 });
+        } else {
+          this.setState({ overlay: null, dialogueStep: 0 });
+        }
+      },
+
+      onCloseTestimony: () => {
+        this._toast('📖 Testimonio guardado en el Diario');
+        this.setState({ overlay: null });
+      },
+
+      onToggleSkillWheel: () => this.setState(st => ({
+        overlay: st.overlay === 'skill_wheel' ? null : 'skill_wheel'
+      })),
+
+      onObservar: () => this.setState({
+        overlay: 'dialogue', currentDialogue: 'dona_esperanza', dialogueStep: 0
+      }),
+
+      onDocumentar: () => {
+        const ev = this.state.evidence;
+        if (ev.length < 5) {
+          this.setState({ evidence: [...ev, { id: Date.now(), name: 'Devastación documentada — La Pampa', zone: 'La Pampa' }], overlay: null });
+          this._toast('📷 Evidencia añadida al Expediente');
+        } else {
+          this.setState({ overlay: null });
+          this._toast('Expediente completo');
+        }
+      },
+
+      onYaku: () => {
+        const v = this.state.vinculo;
+        this.setState({ vinculo: Math.max(0, v - 1), overlay: null });
+        this._toast(v > 0 ? '🐍 Yaku abre el camino...' : '⚠ Vínculo agotado');
+      },
+
+      onSembrar: () => {
+        const { seeds } = this.state;
+        if (seeds > 0) {
+          this.setState({ seeds: seeds - 1, overlay: null });
+          this._toast('🌱 Fragmento de vida sembrado');
+        } else {
+          this.setState({ overlay: null });
+          this._toast('No quedan semillas');
+        }
+      },
+
+      onDetectSimulate: () => {
+        this.setState(st => ({ lives: Math.max(0, st.lives - 1) }));
+        this._toast('⚠ Te vieron — retrocediendo al último punto seguro...');
+      },
+
+      onMisionComplete: () => {
+        this.setState(st => ({ allies: st.allies + 1, screen: 'world_map', overlay: null }));
+        setTimeout(() => this._toast('✓ La Pampa documentada — aliado sumado'), 80);
+      },
+
+      onGoEnding:   () => {
+        if (this.state.evidence.length >= 1) {
+          this._goto('ending');
+        } else {
+          this._toast('⚠ Se requiere evidencia para denunciar');
+        }
+      },
+      onTabTest:    () => this.setState({ diaryTab: 'testimonios' }),
+      onTabLug:     () => this.setState({ diaryTab: 'lugares' }),
+    };
+  }
+}
+</script>
+</body>
+</html>
