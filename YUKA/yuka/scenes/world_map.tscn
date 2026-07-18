@@ -1,0 +1,155 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world_map.gd" id="1_map"]
+
+[node name="WorldMap" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_map")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0627451, 0.0823529, 0.0588235, 1)
+
+[node name="TopBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="RegionName" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "MADRE DE DIOS"
+
+[node name="Spacer" type="Control" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AlliesLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Aliados: 0"
+
+[node name="SeedsLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "🌱 ×2"
+
+[node name="BackButton" type="Button" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Volver"
+
+[node name="MapContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 40.0
+offset_bottom = -140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PuertoButton" type="Button" parent="MapContainer"]
+layout_mode = 0
+offset_left = 480.0
+offset_top = 60.0
+offset_right = 640.0
+offset_bottom = 95.0
+text = "★ Pto. Maldonado"
+
+[node name="PampaButton" type="Button" parent="MapContainer"]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 110.0
+offset_right = 340.0
+offset_bottom = 145.0
+text = "⚠ La Pampa"
+
+[node name="RioButton" type="Button" parent="MapContainer"]
+disabled = true
+layout_mode = 0
+offset_left = 340.0
+offset_top = 50.0
+offset_right = 480.0
+offset_bottom = 85.0
+text = "🔒 Río M. de Dios"
+
+[node name="AmarakaeriButton" type="Button" parent="MapContainer"]
+disabled = true
+layout_mode = 0
+offset_left = 140.0
+offset_top = 70.0
+offset_right = 260.0
+offset_bottom = 105.0
+text = "🔒 Amarakaeri"
+
+[node name="ManuButton" type="Button" parent="MapContainer"]
+disabled = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 90.0
+offset_right = 160.0
+offset_bottom = 125.0
+text = "🔒 Manu"
+
+[node name="TresIslasButton" type="Button" parent="MapContainer"]
+disabled = true
+layout_mode = 0
+offset_left = 580.0
+offset_top = 120.0
+offset_right = 700.0
+offset_bottom = 155.0
+text = "🔒 Tres Islas"
+
+[node name="InfoPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+offset_top = -140.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="InfoPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InfoPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ZoneName" type="Label" parent="InfoPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 0.647059, 0.129412, 1)
+text = "Puerto Maldonado — La Ciudad Gris"
+
+[node name="ZoneDesc" type="Label" parent="InfoPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "M1 · El regreso.
+Volver al pueblo natal. Aprende a observar los rastros del mercurio y a documentar testimonios..."
+autowrap_mode = 2
+
+[node name="EnterButton" type="Button" parent="InfoPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Entrar a la Zona ▸"
