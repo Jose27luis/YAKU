@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/dialogue_box.tscn" id="4_dlg"]
 [ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="5_npc"]
 [ext_resource type="PackedScene" path="res://scenes/interaction_point.tscn" id="6_ip"]
+[ext_resource type="PackedScene" path="res://scenes/terrain_manager.tscn" id="7_tm"]
 
 [sub_resource type="RectangleShape2D" id="wall_h"]
 size = Vector2(1920, 20)
@@ -25,202 +26,7 @@ size = Vector2(20, 200)
 [node name="LaFrontera" type="Node2D"]
 script = ExtResource("1_frontera")
 
-[node name="Background" type="ColorRect" parent="."]
-offset_right = 1920.0
-offset_bottom = 1080.0
-color = Color(0.14, 0.18, 0.1, 1)
-
-[node name="GroundPatches" type="Node2D" parent="."]
-
-[node name="Path1" type="ColorRect" parent="GroundPatches"]
-offset_left = 80.0
-offset_top = 400.0
-offset_right = 1840.0
-offset_bottom = 500.0
-color = Color(0.28, 0.22, 0.14, 1)
-
-[node name="Path2" type="ColorRect" parent="GroundPatches"]
-offset_left = 400.0
-offset_top = 200.0
-offset_right = 500.0
-offset_bottom = 800.0
-color = Color(0.28, 0.22, 0.14, 1)
-
-[node name="Path3" type="ColorRect" parent="GroundPatches"]
-offset_left = 900.0
-offset_top = 300.0
-offset_right = 1000.0
-offset_bottom = 900.0
-color = Color(0.25, 0.2, 0.12, 1)
-
-[node name="Clearing1" type="ColorRect" parent="GroundPatches"]
-offset_left = 300.0
-offset_top = 350.0
-offset_right = 550.0
-offset_bottom = 550.0
-color = Color(0.22, 0.19, 0.12, 1)
-
-[node name="Clearing2" type="ColorRect" parent="GroundPatches"]
-offset_left = 1200.0
-offset_top = 350.0
-offset_right = 1500.0
-offset_bottom = 600.0
-color = Color(0.2, 0.17, 0.1, 1)
-
-[node name="ToxicPuddle1" type="ColorRect" parent="GroundPatches"]
-offset_left = 1300.0
-offset_top = 700.0
-offset_right = 1420.0
-offset_bottom = 780.0
-color = Color(0.24, 0.34, 0.18, 0.7)
-
-[node name="ToxicPuddle2" type="ColorRect" parent="GroundPatches"]
-offset_left = 700.0
-offset_top = 750.0
-offset_right = 800.0
-offset_bottom = 830.0
-color = Color(0.2, 0.3, 0.14, 0.6)
-
-[node name="RiverStrip" type="ColorRect" parent="GroundPatches"]
-offset_left = 0.0
-offset_top = 900.0
-offset_right = 1920.0
-offset_bottom = 1000.0
-color = Color(0.18, 0.28, 0.2, 0.8)
-
-[node name="Obstacles" type="Node2D" parent="."]
-
-[node name="Tree1" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(200, 250)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree1"]
-shape = SubResource("obstacle_tree1")
-[node name="Vis" type="ColorRect" parent="Obstacles/Tree1"]
-offset_left = -12.0
-offset_top = -30.0
-offset_right = 12.0
-offset_bottom = 0.0
-color = Color(0.12, 0.28, 0.08, 1)
-
-[node name="Tree2" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(600, 180)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree2"]
-shape = SubResource("obstacle_tree1")
-[node name="Vis" type="ColorRect" parent="Obstacles/Tree2"]
-offset_left = -12.0
-offset_top = -30.0
-offset_right = 12.0
-offset_bottom = 0.0
-color = Color(0.1, 0.25, 0.06, 1)
-
-[node name="Tree3" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(150, 600)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree3"]
-shape = SubResource("obstacle_tree2")
-[node name="Vis" type="ColorRect" parent="Obstacles/Tree3"]
-offset_left = -15.0
-offset_top = -35.0
-offset_right = 15.0
-offset_bottom = 0.0
-color = Color(0.13, 0.3, 0.09, 1)
-
-[node name="Tree4" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(800, 280)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree4"]
-shape = SubResource("obstacle_tree2")
-[node name="Vis" type="ColorRect" parent="Obstacles/Tree4"]
-offset_left = -15.0
-offset_top = -35.0
-offset_right = 15.0
-offset_bottom = 0.0
-color = Color(0.15, 0.26, 0.1, 1)
-
-[node name="Tree5" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(1100, 200)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree5"]
-shape = SubResource("obstacle_tree1")
-[node name="Vis" type="ColorRect" parent="Obstacles/Tree5"]
-offset_left = -12.0
-offset_top = -30.0
-offset_right = 12.0
-offset_bottom = 0.0
-color = Color(0.08, 0.22, 0.06, 1)
-
-[node name="Tree6" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(1500, 250)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Tree6"]
-shape = SubResource("obstacle_tree1")
-[node name="Vis" type="ColorRect" parent="Obstacles/Tree6"]
-offset_left = -12.0
-offset_top = -30.0
-offset_right = 12.0
-offset_bottom = 0.0
-color = Color(0.1, 0.2, 0.07, 1)
-
-[node name="Stump1" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(650, 500)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Stump1"]
-shape = SubResource("obstacle_tree1")
-[node name="Vis" type="ColorRect" parent="Obstacles/Stump1"]
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 8.0
-offset_bottom = 8.0
-color = Color(0.3, 0.2, 0.1, 1)
-
-[node name="Stump2" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(1050, 550)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Stump2"]
-shape = SubResource("obstacle_tree1")
-[node name="Vis" type="ColorRect" parent="Obstacles/Stump2"]
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
-color = Color(0.28, 0.18, 0.08, 1)
-
-[node name="Choza1" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(360, 320)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Choza1"]
-shape = SubResource("obstacle_tree2")
-[node name="Vis" type="ColorRect" parent="Obstacles/Choza1"]
-offset_left = -20.0
-offset_top = -25.0
-offset_right = 20.0
-offset_bottom = 5.0
-color = Color(0.22, 0.35, 0.55, 0.8)
-
-[node name="Choza2" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(1350, 450)
-[node name="Col" type="CollisionShape2D" parent="Obstacles/Choza2"]
-shape = SubResource("obstacle_tree2")
-[node name="Vis" type="ColorRect" parent="Obstacles/Choza2"]
-offset_left = -22.0
-offset_top = -28.0
-offset_right = 22.0
-offset_bottom = 5.0
-color = Color(0.2, 0.32, 0.5, 0.7)
-
-[node name="Walls" type="Node2D" parent="."]
-
-[node name="TopWall" type="StaticBody2D" parent="Walls"]
-position = Vector2(960, 10)
-[node name="Col" type="CollisionShape2D" parent="Walls/TopWall"]
-shape = SubResource("wall_h")
-
-[node name="BottomWall" type="StaticBody2D" parent="Walls"]
-position = Vector2(960, 1070)
-[node name="Col" type="CollisionShape2D" parent="Walls/BottomWall"]
-shape = SubResource("wall_h")
-
-[node name="LeftWall" type="StaticBody2D" parent="Walls"]
-position = Vector2(10, 540)
-[node name="Col" type="CollisionShape2D" parent="Walls/LeftWall"]
-shape = SubResource("wall_v")
-
-[node name="RightWall" type="StaticBody2D" parent="Walls"]
-position = Vector2(1910, 540)
-[node name="Col" type="CollisionShape2D" parent="Walls/RightWall"]
-shape = SubResource("wall_v")
+[node name="TerrainManager" parent="." instance=ExtResource("7_tm")]
 
 [node name="Barrier" type="StaticBody2D" parent="."]
 position = Vector2(1860, 450)
@@ -233,7 +39,7 @@ offset_right = 60.0
 offset_bottom = -90.0
 theme_override_colors/font_color = Color(0.77, 0.21, 0.27, 1)
 theme_override_font_sizes/font_size = 8
-text = "⛔ ZONA RESTRINGIDA"
+text = "ZONA RESTRINGIDA"
 horizontal_alignment = 1
 [node name="Post" type="ColorRect" parent="Barrier"]
 offset_left = -3.0
