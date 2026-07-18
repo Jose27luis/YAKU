@@ -50,7 +50,7 @@ text = "Aliados: 0"
 
 [node name="SeedsLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
-text = "🌱 ×2"
+text = "Semillas: 2"
 
 [node name="BackButton" type="Button" parent="TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -72,7 +72,7 @@ offset_left = 480.0
 offset_top = 60.0
 offset_right = 640.0
 offset_bottom = 95.0
-text = "★ Pto. Maldonado"
+text = "Pto. Maldonado"
 
 [node name="PampaButton" type="Button" parent="MapContainer"]
 layout_mode = 0
@@ -80,7 +80,7 @@ offset_left = 220.0
 offset_top = 110.0
 offset_right = 340.0
 offset_bottom = 145.0
-text = "⚠ La Pampa"
+text = "La Pampa"
 
 [node name="RioButton" type="Button" parent="MapContainer"]
 disabled = true
@@ -89,7 +89,7 @@ offset_left = 340.0
 offset_top = 50.0
 offset_right = 480.0
 offset_bottom = 85.0
-text = "🔒 Río M. de Dios"
+text = "[Bloqueado] Rio M. de Dios"
 
 [node name="AmarakaeriButton" type="Button" parent="MapContainer"]
 disabled = true
@@ -98,7 +98,7 @@ offset_left = 140.0
 offset_top = 70.0
 offset_right = 260.0
 offset_bottom = 105.0
-text = "🔒 Amarakaeri"
+text = "[Bloqueado] Amarakaeri"
 
 [node name="ManuButton" type="Button" parent="MapContainer"]
 disabled = true
@@ -107,7 +107,7 @@ offset_left = 40.0
 offset_top = 90.0
 offset_right = 160.0
 offset_bottom = 125.0
-text = "🔒 Manu"
+text = "[Bloqueado] Manu"
 
 [node name="TresIslasButton" type="Button" parent="MapContainer"]
 disabled = true
@@ -116,7 +116,7 @@ offset_left = 580.0
 offset_top = 120.0
 offset_right = 700.0
 offset_bottom = 155.0
-text = "🔒 Tres Islas"
+text = "[Bloqueado] Tres Islas"
 
 [node name="InfoPanel" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -152,4 +152,4 @@ autowrap_mode = 2
 
 [node name="EnterButton" type="Button" parent="InfoPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Entrar a la Zona ▸"
+text = "Entrar a la Zona >"
