@@ -22,9 +22,18 @@ func _ready() -> void:
 		sprite.texture = loaded_texture
 
 func _physics_process(_delta: float) -> void:
-	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var current_speed = RUN_SPEED if Input.is_key_pressed(KEY_SHIFT) else SPEED
+	var direction = Vector2.ZERO
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+		direction.x -= 1
+	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+		direction.x += 1
+	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+		direction.y -= 1
+	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+		direction.y += 1
 	
+	direction = direction.normalized()
+	var current_speed = RUN_SPEED if Input.is_key_pressed(KEY_SHIFT) else SPEED
 	velocity = direction * current_speed
 	move_and_slide()
 
